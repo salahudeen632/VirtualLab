@@ -73,14 +73,19 @@ COPY patch.sh /home/ibsim/patch.sh
 USER ibsim
 WORKDIR /tmp
 ENV DEBIAN_FRONTEND=noninteractive
+# Install miniconda instead of full anaconda to space space in final image.
+RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh && \
+bash Miniconda3-latest-Linux-x86_64.sh -b && \
+sudo rm Miniconda3-latest-Linux-x86_64.sh
 # Download and install VirtualLab and its requirements
 RUN sudo chmod 755 /home/ibsim/patch.sh && \
     wget -O Install_VirtualLab.sh https://gitlab.com/ibsim/virtuallab/-/raw/master/Scripts/Install/Install_VirtualLab.sh?inline=false && \
     chmod 755 Install_VirtualLab.sh && \
-    sudo ./Install_VirtualLab.sh -P c -S y -E y -y && \
+    sudo ./Install_VirtualLab.sh -S y -E y -y && \
     sudo rm /home/ibsim/salome_meca-2019.0.3-1-universal.run && \
     sudo rm /home/ibsim/salome_meca-2019.0.3-1-universal.tgz && \
     sudo rm /home/ibsim/Anaconda3-2020.02-Linux-x86_64.sh && \
     sudo rm /home/ibsim/VirtualLab/Scripts/Install/ERMES-CPlas-v12.5.zip
+    
 
 USER root
